@@ -94,13 +94,10 @@ graph TD
 ev-charging-optimizer/
 ├── 📄 README.md                          # This comprehensive documentation
 ├── 📄 .gitignore                         # Git ignore rules for Python, Node.js, Docker
-├── 📄 docker-compose.yml                 # Development environment orchestration
-├── 📄 docker-compose.prod.yml            # Production deployment configuration
 │
 ├── 🗂️ backend/                           # Python FastAPI Backend
 │   ├── 📄 pyproject.toml                 # Poetry dependencies and project config
 │   ├── 📄 poetry.lock                    # Locked dependency versions
-│   ├── 📄 requirements.txt               # Alternative pip dependencies
 │   ├── 📄 .env.example                   # Environment variables template
 │   ├── 📄 .env                          # Actual environment variables (gitignored)
 │   │
