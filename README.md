@@ -74,7 +74,7 @@ graph TD
 | **Icons** | Lucide React | Beautiful, customizable icons |
 | **Forms** | React Hook Form | Efficient form handling and validation |
 
-### **Infrastructure & DevOps**
+### **Infrastructure **
 | Component | Technology | Purpose |
 |-----------|------------|---------|
 | **Containerization** | Docker & Docker Compose | Service orchestration and deployment |
