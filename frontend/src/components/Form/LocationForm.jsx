@@ -1,4 +1,4 @@
-// frontend/src/components/Form/LocationForm.jsx
+
 import React, { useState } from 'react';
 import { MapPin, Search, Settings } from 'lucide-react';
 import Button from '../UI/Button';

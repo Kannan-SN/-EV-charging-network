@@ -1,5 +1,5 @@
 
-// frontend/src/utils/validators.js
+
 export const validateLocation = (location) => {
   if (!location || typeof location !== 'string') {
     return 'Location is required';

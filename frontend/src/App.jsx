@@ -1,4 +1,4 @@
-// frontend/src/App.jsx (Updated to use Dashboard component)
+
 import React from 'react';
 import { Zap } from 'lucide-react';
 import Dashboard from './components/dashboard/Dashboard';
@@ -6,7 +6,7 @@ import Dashboard from './components/dashboard/Dashboard';
 function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50">
-      {/* Header */}
+   
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
@@ -29,10 +29,9 @@ function App() {
         </div>
       </header>
 
-      {/* Main Content - Dashboard */}
       <Dashboard />
 
-      {/* Footer */}
+
       <footer className="bg-white border-t mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

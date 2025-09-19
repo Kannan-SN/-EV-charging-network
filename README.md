@@ -79,8 +79,6 @@ graph TD
 |-----------|------------|---------|
 | **Containerization** | Docker & Docker Compose | Service orchestration and deployment |
 | **Database** | Weaviate (Dockerized) | Vector storage for recommendations |
-| **Development** | Hot reloading, Auto-restart | Rapid development workflow |
-| **Testing** | Pytest, Custom test scripts | Quality assurance and validation |
 
 ### **External Data Sources (Free APIs)**
 - **OpenStreetMap/Overpass API**: Traffic and road network data

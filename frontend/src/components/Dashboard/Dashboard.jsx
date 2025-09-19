@@ -1,4 +1,3 @@
-// frontend/src/components/Dashboard/Dashboard.jsx
 import React, { useState } from 'react';
 import { Search, MapPin, BarChart3, TrendingUp } from 'lucide-react';
 import MetricsCard from './MetricsCard';
@@ -25,19 +24,18 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Search Section */}
+   
         <div className="mb-8">
           <LocationForm onSubmit={handleOptimize} loading={loading} />
         </div>
 
-        {/* Error Display */}
         {error && (
           <div className="mb-8 bg-red-50 border border-red-200 rounded-lg p-4">
             <p className="text-red-800">{error}</p>
           </div>
         )}
 
-        {/* Metrics Overview */}
+        
         {overallMetrics && (
           <div className="mb-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <MetricsCard
@@ -70,10 +68,10 @@ const Dashboard = () => {
           </div>
         )}
 
-        {/* Main Content */}
+  
         {recommendations.length > 0 && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Map View */}
+    
             <div className="bg-white rounded-lg shadow-sm overflow-hidden">
               <div className="p-4 border-b bg-gray-50">
                 <h2 className="text-lg font-semibold text-gray-900">Location Map</h2>
@@ -84,7 +82,7 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* Recommendations List */}
+         
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-semibold text-gray-900">Recommendations</h2>

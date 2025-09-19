@@ -1,5 +1,4 @@
 
-// frontend/src/components/UI/Loading.jsx
 import React from 'react';
 
 const Loading = ({ size = 'md', text = 'Loading...', className = '' }) => {

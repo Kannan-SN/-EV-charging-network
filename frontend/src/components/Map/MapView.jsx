@@ -1,4 +1,4 @@
-// frontend/src/components/Map/MapView.jsx
+
 import React from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import LocationMarker from './LocationMarker';

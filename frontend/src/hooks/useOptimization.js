@@ -1,4 +1,4 @@
-// frontend/src/hooks/useOptimization.js
+
 import { useState, useCallback } from 'react';
 import { optimizationAPI } from '../services/api';
 
@@ -25,7 +25,7 @@ export const useOptimization = () => {
       setRequestId(response.request_id);
       setProcessingTime(response.processing_time_seconds);
 
-      // Check for errors in metadata
+    
       if (response.metadata?.errors?.length > 0) {
         console.warn('Optimization completed with warnings:', response.metadata.errors);
         setError(`Warning: ${response.metadata.errors.join(', ')}`);

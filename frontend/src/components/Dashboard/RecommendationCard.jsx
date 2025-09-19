@@ -1,4 +1,4 @@
-// frontend/src/components/Dashboard/RecommendationCard.jsx
+
 import React from 'react';
 import { TrendingUp, Zap, MapPin, DollarSign, Users } from 'lucide-react';
 

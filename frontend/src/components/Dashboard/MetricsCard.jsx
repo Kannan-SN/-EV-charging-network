@@ -1,5 +1,4 @@
 
-// frontend/src/components/Dashboard/MetricsCard.jsx
 import React from 'react';
 
 const MetricsCard = ({ title, value, suffix, icon, color = 'blue', truncate = false }) => {

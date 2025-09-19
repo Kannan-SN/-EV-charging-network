@@ -1,9 +1,9 @@
-// frontend/src/components/Map/LocationMarker.jsx
+
 import React from 'react';
 import { Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 
-// Fix for default markers in React Leaflet
+
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
@@ -14,7 +14,6 @@ L.Icon.Default.mergeOptions({
 const LocationMarker = ({ recommendation, rank }) => {
   const { location, scores, insights } = recommendation;
 
-  // Create custom icon based on score
   const getMarkerIcon = (score) => {
     const color = score >= 8 ? 'green' : score >= 6 ? 'orange' : 'red';
     return new L.Icon({

@@ -1,4 +1,4 @@
-// frontend/src/components/Form/FilterPanel.jsx
+
 import React from 'react';
 
 const FilterPanel = ({ filters, onChange, disabled = false }) => {
@@ -20,7 +20,7 @@ const FilterPanel = ({ filters, onChange, disabled = false }) => {
       <h3 className="text-sm font-medium text-gray-700">Advanced Options</h3>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Search Radius */}
+     
         <div>
           <label htmlFor="radius" className="block text-sm font-medium text-gray-700 mb-1">
             Search Radius
