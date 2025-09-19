@@ -1,4 +1,4 @@
-# backend/app/__init__.py
+
 """
 EV Charging Network Optimizer
 

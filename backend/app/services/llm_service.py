@@ -2,7 +2,7 @@ import google.generativeai as genai
 import logging
 from typing import Dict, Any, Optional
 from app.config import settings
-# No api_service or llm_service instance here
+
 
 logger = logging.getLogger(__name__)
 

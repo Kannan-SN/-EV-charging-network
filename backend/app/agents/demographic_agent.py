@@ -1,7 +1,7 @@
-# backend/app/agents/demographic_agent.py (Fixed imports)
+
 import httpx
 import logging
-from typing import Dict, Any, Tuple  # Added missing imports
+from typing import Dict, Any, Tuple  
 from geopy.geocoders import Nominatim
 
 from app.agents.base_agent import BaseAgent
@@ -24,7 +24,7 @@ class DemographicInsightsAgent(BaseAgent):
             if 'errors' not in state:
                 state['errors'] = []
             
-            # Get coordinates
+         
             coordinates = await self._get_coordinates(state['location'])
             if not coordinates:
                 state['errors'].append(f"Could not geocode location for demographics: {state['location']}")
@@ -33,7 +33,7 @@ class DemographicInsightsAgent(BaseAgent):
             
             lat, lon = coordinates
             
-            # Fetch real demographic data
+      
             demographic_data = await self._fetch_real_demographic_data(lat, lon, state['location'])
             
             state['demographic_data'] = demographic_data
@@ -64,16 +64,16 @@ class DemographicInsightsAgent(BaseAgent):
         """Fetch real demographic data from multiple sources"""
         async with httpx.AsyncClient(timeout=30.0) as client:
             try:
-                # 1. Get place information from GeoNames
+          
                 place_data = await self._fetch_place_data(client, lat, lon)
                 
-                # 2. Get nearby amenities as indicators of development
+              
                 amenities_data = await self._fetch_amenities_data(client, lat, lon)
                 
-                # 3. Get economic indicators from nearby infrastructure
+                
                 economic_data = await self._fetch_economic_indicators(client, lat, lon)
                 
-                # 4. Calculate dynamic demographic metrics
+               
                 demographic_metrics = self._calculate_demographic_metrics(
                     place_data, amenities_data, economic_data, location
                 )
@@ -102,7 +102,7 @@ class DemographicInsightsAgent(BaseAgent):
                     "lng": lon,
                     "radius": 30,
                     "maxRows": 10,
-                    "username": "demo"  # Replace with your GeoNames username
+                    "username": "demo"  
                 }
             )
             
@@ -111,7 +111,7 @@ class DemographicInsightsAgent(BaseAgent):
                 places = data.get("geonames", [])
                 
                 if places:
-                    # Calculate total population in area
+                   
                     total_population = sum(place.get("population", 0) for place in places)
                     largest_place = max(places, key=lambda x: x.get("population", 0))
                     
@@ -152,7 +152,7 @@ class DemographicInsightsAgent(BaseAgent):
                 data = response.json()
                 elements = data.get("elements", [])
                 
-                # Count different types of amenities
+               
                 banks = len([e for e in elements if e.get("tags", {}).get("amenity") in ["bank", "atm"]])
                 healthcare = len([e for e in elements if e.get("tags", {}).get("amenity") in ["hospital", "clinic"]])
                 education = len([e for e in elements if e.get("tags", {}).get("amenity") in ["school", "university"]])
@@ -160,7 +160,7 @@ class DemographicInsightsAgent(BaseAgent):
                 automotive = len([e for e in elements if e.get("tags", {}).get("shop") in ["car", "car_parts", "fuel"]])
                 buildings = len([e for e in elements if "building" in e.get("tags", {})])
                 
-                # Calculate development index
+                
                 development_index = (banks * 2 + healthcare * 2 + education * 1.5 + retail + automotive * 1.5) / 10
                 
                 return {
@@ -210,7 +210,7 @@ class DemographicInsightsAgent(BaseAgent):
                 fuel_stations = len([e for e in elements if e.get("tags", {}).get("amenity") == "fuel"])
                 existing_ev_chargers = len([e for e in elements if e.get("tags", {}).get("amenity") == "charging_station"])
                 
-                # Calculate economic activity score
+                
                 economic_score = (
                     major_roads * 1.5 + 
                     public_transport * 2 + 
@@ -219,7 +219,7 @@ class DemographicInsightsAgent(BaseAgent):
                     fuel_stations * 1.2
                 ) / 10
                 
-                # EV readiness score
+               
                 ev_readiness = min((fuel_stations * 0.3 + existing_ev_chargers * 2 + major_roads * 0.2), 10)
                 
                 return {
@@ -248,26 +248,26 @@ class DemographicInsightsAgent(BaseAgent):
     ) -> Dict[str, Any]:
         """Calculate demographic metrics from real data"""
         
-        # Population density calculation
+        
         total_population = place_data.get("total_population", 50000)
-        area_km2 = 3.14159 * (10 ** 2)  # 10km radius area
+        area_km2 = 3.14159 * (10 ** 2)  
         population_density = total_population / area_km2
         
-        # Development level based on amenities
+        
         development_index = amenities_data.get("development_index", 5.0)
         
-        # Economic activity level
+        
         economic_score = economic_data.get("economic_activity_score", 5.0)
         
-        # EV adoption estimate based on development and economic factors
-        base_adoption_rate = 0.02  # 2% base rate for Tamil Nadu
-        development_multiplier = development_index / 5.0  # Normalize to 1.0
-        economic_multiplier = economic_score / 5.0  # Normalize to 1.0
+        
+        base_adoption_rate = 0.02  
+        development_multiplier = development_index / 5.0 
+        economic_multiplier = economic_score / 5.0  
         
         estimated_ev_adoption = base_adoption_rate * development_multiplier * economic_multiplier
-        estimated_ev_adoption = min(estimated_ev_adoption, 0.25)  # Cap at 25%
+        estimated_ev_adoption = min(estimated_ev_adoption, 0.25)  
         
-        # Income level estimation based on development and economic indicators
+        
         if development_index >= 8 and economic_score >= 7:
             income_level = "Upper Middle"
             income_score = 8.5
@@ -281,7 +281,7 @@ class DemographicInsightsAgent(BaseAgent):
             income_level = "Lower"
             income_score = 4.0
         
-        # Target market size
+        
         if total_population > 500000:
             market_size = "Large"
         elif total_population > 100000:
@@ -289,12 +289,12 @@ class DemographicInsightsAgent(BaseAgent):
         else:
             market_size = "Small"
         
-        # Overall demographic score
+       
         demographic_score = (
-            min(population_density / 1000, 10) * 0.3 +  # Population density factor
-            development_index * 0.3 +  # Development factor
-            economic_score * 0.2 +  # Economic activity factor
-            (estimated_ev_adoption * 100) * 0.2  # EV adoption factor
+            min(population_density / 1000, 10) * 0.3 +  
+            development_index * 0.3 +  
+            economic_score * 0.2 +  
+            (estimated_ev_adoption * 100) * 0.2  
         )
         demographic_score = min(demographic_score, 10)
         

@@ -1,4 +1,4 @@
-# backend/app/services/weaviate_service.py
+
 import weaviate
 import logging
 from typing import Dict, Any, List, Optional

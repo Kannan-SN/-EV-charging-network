@@ -1,11 +1,10 @@
 
-# backend/app/agents/competitor_agent.py (Fixed imports)
 import overpy
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
 import logging
 import httpx
-from typing import Dict, Any, List  # Added missing imports
+from typing import Dict, Any, List  
 
 from app.agents.base_agent import BaseAgent
 from app.models import AgentState
@@ -27,7 +26,6 @@ class CompetitorMappingAgent(BaseAgent):
             if 'errors' not in state:
                 state['errors'] = []
             
-            # Get location coordinates
             location_data = self.geolocator.geocode(f"{state['location']}, Tamil Nadu, India")
             if not location_data:
                 state['errors'].append(f"Could not geocode location: {state['location']}")
@@ -35,8 +33,7 @@ class CompetitorMappingAgent(BaseAgent):
                 return state
             
             lat, lon = location_data.latitude, location_data.longitude
-            
-            # Find existing charging stations using real data
+
             competitor_data = await self._find_real_existing_stations(lat, lon, state['radius_km'])
             
             state['competitor_data'] = competitor_data
@@ -57,13 +54,11 @@ class CompetitorMappingAgent(BaseAgent):
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 
-                # Get charging stations from OpenStreetMap
+               
                 osm_stations = await self._fetch_osm_charging_stations(client, lat, lon, radius_km)
                 
-                # Get fuel stations (potential conversion sites)
                 fuel_stations = await self._fetch_fuel_stations(client, lat, lon, radius_km)
-                
-                # Calculate competition metrics
+        
                 competition_metrics = self._calculate_competition_metrics(
                     osm_stations, fuel_stations, lat, lon, radius_km
                 )
@@ -131,7 +126,7 @@ class CompetitorMappingAgent(BaseAgent):
                     }
                     stations.append(station_info)
             
-            # Sort by distance
+  
             stations.sort(key=lambda x: x["distance_km"])
             return stations
             
@@ -174,7 +169,7 @@ class CompetitorMappingAgent(BaseAgent):
             
             return {
                 "count": len(fuel_stations),
-                "stations": fuel_stations[:10]  # Limit for performance
+                "stations": fuel_stations[:10] 
             }
             
         except Exception as e:
@@ -190,30 +185,26 @@ class CompetitorMappingAgent(BaseAgent):
         radius_km: int
     ) -> Dict[str, Any]:
         """Calculate competition metrics from real data"""
-        
-        # Basic counts
+
         total_ev_stations = len(charging_stations)
         
-        # Find nearest competitor
+
         nearest_distance = float('inf')
         if charging_stations:
             nearest_distance = min([s["distance_km"] for s in charging_stations])
         
-        # Market saturation calculation
         area_km2 = 3.14159 * (radius_km ** 2)
         ev_station_density = total_ev_stations / area_km2
-        
-        # Competition score (0-10, higher is better for new stations)
+
         if ev_station_density == 0:
-            competition_score = 10.0  # No competition
+            competition_score = 10.0 
         elif ev_station_density < 0.1:
             competition_score = 8.5
         elif ev_station_density < 0.3:
             competition_score = 7.0
         else:
             competition_score = 5.0
-        
-        # Market opportunity assessment
+    
         if total_ev_stations == 0:
             market_opportunity = "Excellent"
         elif total_ev_stations < 3:
@@ -223,7 +214,7 @@ class CompetitorMappingAgent(BaseAgent):
         else:
             market_opportunity = "Low"
         
-        # Market saturation level
+ 
         if ev_station_density < 0.2:
             saturation_level = "Low"
         elif ev_station_density < 0.7:
@@ -238,7 +229,7 @@ class CompetitorMappingAgent(BaseAgent):
             "market_saturation": saturation_level,
             "market_opportunity": market_opportunity,
             "fuel_stations_nearby": fuel_data.get("count", 0),
-            "stations_list": charging_stations[:5]  # Top 5 nearest
+            "stations_list": charging_stations[:5] 
         }
     
     def _get_fallback_competitor_data(self, location: str) -> Dict[str, Any]:

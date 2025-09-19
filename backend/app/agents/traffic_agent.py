@@ -1,4 +1,4 @@
-# backend/app/agents/debug_traffic_agent.py (Enhanced with debugging and location-specific data)
+
 import asyncio
 import httpx
 from typing import Dict, Any, List, Tuple
@@ -30,7 +30,7 @@ class TrafficFlowAnalyst(BaseAgent):
             if 'errors' not in state:
                 state['errors'] = []
             
-            # Get coordinates for the location
+          
             coordinates = await self._get_coordinates(location)
             if not coordinates:
                 logger.warning(f"Geocoding failed for {location}, using location-specific fallback")
@@ -41,7 +41,7 @@ class TrafficFlowAnalyst(BaseAgent):
             lat, lon = coordinates
             logger.info(f"Coordinates for {location}: {lat}, {lon}")
             
-            # Try to fetch real traffic data
+          
             try:
                 traffic_data = await self._analyze_traffic_patterns(lat, lon, state['radius_km'], location)
                 state['traffic_data'] = traffic_data
@@ -58,7 +58,7 @@ class TrafficFlowAnalyst(BaseAgent):
             if 'errors' not in state:
                 state['errors'] = []
             state['errors'].append(error_msg)
-            # Provide location-specific fallback even in case of error
+           
             state['traffic_data'] = self._get_location_specific_fallback(state['location'])
         
         return state
@@ -66,7 +66,7 @@ class TrafficFlowAnalyst(BaseAgent):
     async def _get_coordinates(self, location: str) -> Tuple[float, float] | None:
         """Get latitude and longitude for a location"""
         try:
-            # Enhanced geocoding with multiple attempts
+           
             queries = [
                 f"{location}, Tamil Nadu, India",
                 f"{location}, Tamil Nadu",
@@ -90,7 +90,7 @@ class TrafficFlowAnalyst(BaseAgent):
         
         location_lower = location.lower().strip()
         
-        # Tamil Nadu location-specific data based on real characteristics
+       
         location_profiles = {
             "chennai": {
                 "traffic_score": 9.2,
@@ -178,18 +178,18 @@ class TrafficFlowAnalyst(BaseAgent):
             }
         }
         
-        # Find matching location profile
+       
         profile = None
         for key, data in location_profiles.items():
             if key in location_lower:
                 profile = data
                 break
         
-        # If no exact match, use a default based on location characteristics
+       
         if not profile:
-            # Generate pseudo-random but consistent data based on location name
+            
             location_hash = int(hashlib.md5(location_lower.encode()).hexdigest()[:8], 16)
-            base_score = 4.0 + (location_hash % 40) / 10  # 4.0 to 7.9
+            base_score = 4.0 + (location_hash % 40) / 10 
             
             profile = {
                 "traffic_score": base_score,
@@ -200,7 +200,7 @@ class TrafficFlowAnalyst(BaseAgent):
                 "characteristics": f"Regional location with varied traffic patterns"
             }
         
-        # Use provided coordinates or fallback to profile coordinates
+       
         final_coords = [lat or profile["coords"][0], lon or profile["coords"][1]]
         
         logger.info(f"Using location-specific data for {location}: Traffic Score = {profile['traffic_score']}")
@@ -254,8 +254,8 @@ class TrafficFlowAnalyst(BaseAgent):
     ) -> Dict[str, Any]:
         """Analyze traffic patterns using OpenStreetMap data with better error handling"""
         try:
-            async with httpx.AsyncClient(timeout=15.0) as client:  # Reduced timeout
-                # Build Overpass query
+            async with httpx.AsyncClient(timeout=15.0) as client:  
+                
                 query = f"""
                 [out:json][timeout:10];
                 (
@@ -267,7 +267,7 @@ class TrafficFlowAnalyst(BaseAgent):
                 
                 logger.info(f"Querying OSM for {location} at {lat}, {lon}")
                 
-                # Make request to Overpass API
+               
                 response = await client.post(
                     "https://overpass-api.de/api/interpreter",
                     content=query,
@@ -285,10 +285,10 @@ class TrafficFlowAnalyst(BaseAgent):
                 if len(ways) == 0:
                     raise Exception("No road data found from OSM")
                 
-                # Analyze road network
+                
                 road_analysis = self._analyze_road_network(ways)
                 
-                # Calculate traffic metrics
+             
                 traffic_metrics = self._calculate_traffic_metrics(road_analysis, lat, lon, location)
                 
                 return {
@@ -304,7 +304,7 @@ class TrafficFlowAnalyst(BaseAgent):
                 
         except Exception as e:
             logger.error(f"OSM API failed for {location}: {e}")
-            raise  # Re-raise to trigger fallback
+            raise  
     
     def _analyze_road_network(self, ways) -> Dict[str, Any]:
         """Analyze road network characteristics"""
@@ -320,10 +320,10 @@ class TrafficFlowAnalyst(BaseAgent):
                 else:
                     highway_types[highway_type] = 1
                 
-                # Estimate length (simplified)
+                
                 geometry = way.get("geometry", [])
                 if len(geometry) > 1:
-                    total_length += len(geometry) * 0.1  # Rough estimate
+                    total_length += len(geometry) * 0.1 
         
         return {
             "highway_types": highway_types,
@@ -338,7 +338,7 @@ class TrafficFlowAnalyst(BaseAgent):
         """Calculate traffic-related metrics with location awareness"""
         highway_types = road_analysis.get("highway_types", {})
         
-        # Weight different road types for traffic potential
+       
         traffic_weights = {
             "motorway": 10,
             "trunk": 9,
@@ -354,10 +354,10 @@ class TrafficFlowAnalyst(BaseAgent):
             weight = traffic_weights.get(highway_type, 1)
             weighted_score += count * weight
         
-        # Normalize to 0-10 scale and add location-specific adjustment
+       
         base_traffic_score = min(weighted_score / 50, 10) if weighted_score > 0 else 3.0
         
-        # Apply location-specific boost (major cities get higher base scores)
+       
         location_lower = location.lower()
         if "chennai" in location_lower:
             location_boost = 2.0
@@ -387,7 +387,7 @@ class TrafficFlowAnalyst(BaseAgent):
         
         major_roads = ["motorway", "trunk", "primary", "secondary"]
         
-        for way in ways[:10]:  # Limit to first 10 for performance
+        for way in ways[:10]:  
             if way.get("type") == "way":
                 highway_type = way.get("tags", {}).get("highway", "")
                 

@@ -1,4 +1,4 @@
-# 🚗⚡ Smart EV Charging Network Optimizer for Tamil Nadu
+# Smart EV Charging Network Optimizer for Tamil Nadu
 
 > **AI-Powered Location Intelligence for Electric Vehicle Charging Infrastructure**
 
@@ -6,7 +6,7 @@ A comprehensive solution that uses multiple specialized AI agents to optimize EV
 
 ---
 
-## 📋 **Problem Statement**
+## **Problem Statement**
 
 ### **Current Challenges in EV Infrastructure Planning:**
 
@@ -24,7 +24,7 @@ A comprehensive solution that uses multiple specialized AI agents to optimize EV
 
 ---
 
-## 🎯 **Solution Approach**
+## **Solution Approach**
 
 ### **Multi-Agent AI System Architecture**
 
@@ -49,7 +49,7 @@ graph TD
 
 ---
 
-## 🛠️ **Technology Stack**
+## **Technology Stack**
 
 ### **Backend Architecture**
 | Component | Technology | Purpose |
@@ -90,7 +90,7 @@ graph TD
 
 ---
 
-## 📁 **Complete Project Structure & File Responsibilities**
+## 📁**Complete Project Structure & File Responsibilities**
 
 ```
 ev-charging-optimizer/
@@ -115,12 +115,12 @@ ev-charging-optimizer/
 │   │   ├── 🗂️ agents/                   # AI Agent Implementations
 │   │   │   ├── 📄 __init__.py            # Agents package initialization
 │   │   │   ├── 📄 base_agent.py          # Abstract base class for all agents
-│   │   │   ├── 📄 traffic_agent.py       # 🚦 Traffic Flow Analysis (OpenStreetMap)
-│   │   │   ├── 📄 grid_agent.py          # ⚡ Electrical Grid Capacity Assessment
-│   │   │   ├── 📄 competitor_agent.py    # 🏪 Existing Charging Station Mapping
-│   │   │   ├── 📄 demographic_agent.py   # 👥 Population & Economic Analysis
-│   │   │   ├── 📄 roi_agent.py           # 💰 Cost & ROI Calculations
-│   │   │   └── 📄 orchestrator_agent.py  # 🎯 Final Recommendation Synthesis
+│   │   │   ├── 📄 traffic_agent.py       # Traffic Flow Analysis (OpenStreetMap)
+│   │   │   ├── 📄 grid_agent.py          # Electrical Grid Capacity Assessment
+│   │   │   ├── 📄 competitor_agent.py    # Existing Charging Station Mapping
+│   │   │   ├── 📄 demographic_agent.py   # Population & Economic Analysis
+│   │   │   ├── 📄 roi_agent.py           # Cost & ROI Calculations
+│   │   │   └── 📄 orchestrator_agent.py  # Final Recommendation Synthesis
 │   │   │
 │   │   ├── 🗂️ services/                 # External Service Integrations
 │   │   │   ├── 📄 __init__.py            # Services package initialization
@@ -141,12 +141,6 @@ ev-charging-optimizer/
 │   │       ├── 📄 __init__.py            # Routers package initialization
 │   │       ├── 📄 optimization.py       # Main optimization endpoint (POST /optimize)
 │   │       └── 📄 health.py              # Health check endpoints
-│   │
-│   └── 🗂️ tests/                        # Test Suite
-│       ├── 📄 __init__.py                # Tests package initialization
-│       ├── 📄 test_agents.py             # Unit tests for all agents
-│       ├── 📄 test_api.py                # API endpoint integration tests
-│       └── 📄 test_fixed_api.py          # Verification tests for fixes
 │
 ├── 🗂️ frontend/                         # React Frontend Application
 │   ├── 📄 package.json                   # NPM dependencies and scripts
@@ -196,22 +190,11 @@ ev-charging-optimizer/
 │   │
 │   └── 🗂️ public/                       # Static Assets
 │       └── 📄 vite.svg                   # Vite logo
-│
-├── 🗂️ docs/                             # Comprehensive Documentation
-│   ├── 📄 API_DOCUMENTATION.md           # Complete API reference with examples
-│   ├── 📄 AGENT_ARCHITECTURE.md          # Detailed agent design and workflows
-│   ├── 📄 DEPLOYMENT.md                  # Production deployment guide
-│   └── 📄 TROUBLESHOOTING.md            # Common issues and solutions
-│
-└── 🗂️ scripts/                          # Automation Scripts
-    ├── 📄 setup.sh                       # One-command project setup
-    ├── 📄 start_dev.sh                   # Development environment startup
-    └── 📄 deploy.sh                      # Production deployment automation
 ```
 
 ---
 
-## 🤖 **AI Agent Architecture & Responsibilities**
+##  **AI Agent Architecture & Responsibilities**
 
 ### **1. Traffic Flow Analyst** (`traffic_agent.py`)
 - **Purpose**: Analyzes traffic patterns and road network density
@@ -269,58 +252,37 @@ ev-charging-optimizer/
 
 ---
 
-## 🚀 **How to Run the Application**
+## **How to Run the Application**
 
 ### **Prerequisites**
 ```bash
 # System Requirements
 - Python 3.11+ 
 - Node.js 18+
-- Docker & Docker Compose
 - Git
 
 # Check versions
 python --version
 node --version
-docker --version
 ```
 
-### **🏃‍♂️ Method 1: Quick Start (Recommended)**
-
-```bash
-# 1. Clone and setup
-git clone <repository-url>
-cd ev-charging-optimizer
-
-# 2. One-command setup
-chmod +x scripts/setup.sh scripts/start_dev.sh
-./scripts/setup.sh
-
-# 3. Add your API keys
-echo "GEMINI_API_KEY=your_gemini_api_key_here" >> backend/.env
-
-# 4. Start everything
-./scripts/start_dev.sh
-```
-
-### **🔧 Method 2: Manual Setup**
 
 #### **Backend Setup**
 ```bash
 cd backend
 
-# Install Poetry (if not installed)
-curl -sSL https://install.python-poetry.org | python3 -
 
-# Install dependencies
+python -m venv .venv
+
+.\.venv\Scripts\Activate.ps1
+
+# Install Poetry (if not installed)
 poetry install
 
 # Setup environment
 cp .env.example .env
 # Edit .env and add your GEMINI_API_KEY
 
-# Start Weaviate database
-docker-compose up -d
 
 # Start FastAPI server
 poetry run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
@@ -340,14 +302,6 @@ cp .env.example .env
 npm run dev
 ```
 
-### **🐳 Method 3: Full Docker Setup**
-```bash
-# Build and start all services
-docker-compose up --build
-
-# Or run in background
-docker-compose up -d --build
-```
 
 ---
 
@@ -357,14 +311,14 @@ After startup, access these URLs:
 
 | Service | URL | Purpose |
 |---------|-----|---------|
-| **🎨 Frontend UI** | http://localhost:5173 | Main application interface |
-| **🔌 Backend API** | http://localhost:8000 | REST API endpoints |
-| **📚 API Documentation** | http://localhost:8000/docs | Interactive Swagger docs |
-| **🗄️ Weaviate Console** | http://localhost:8080 | Vector database interface |
+| **Frontend UI** | http://localhost:5173 | Main application interface |
+| **Backend API** | http://localhost:8000 | REST API endpoints |
+| **API Documentation** | http://localhost:8000/docs | Interactive Swagger docs |
+| **Weaviate Console** | http://localhost:8080 | Vector database interface |
 
 ---
 
-## 📊 **API Endpoints & Operations**
+## **API Endpoints & Operations**
 
 ### **Core Optimization Endpoint**
 ```bash
@@ -418,24 +372,7 @@ GET /api/v1/optimize/health # Optimization service health
 
 ---
 
-## 🧪 **Testing the Application**
 
-### **Quick API Test**
-```bash
-curl -X POST "http://localhost:8000/api/v1/optimize/" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "location": "Chennai, Tamil Nadu",
-    "radius_km": 50,
-    "station_type": "fast"
-  }'
-```
-
-### **Comprehensive Test Script**
-```bash
-# Save and run the test script
-python backend/test_fixed_api.py
-```
 
 ### **Frontend Testing**
 1. Open http://localhost:5173
@@ -445,69 +382,6 @@ python backend/test_fixed_api.py
 
 ---
 
-## 🔧 **Development Workflow**
-
-### **Backend Development**
-```bash
-cd backend
-
-# Add new dependencies
-poetry add package-name
-
-# Run tests
-poetry run pytest
-
-# Code formatting
-poetry run black .
-poetry run isort .
-
-# Type checking
-poetry run mypy .
-```
-
-### **Frontend Development**
-```bash
-cd frontend
-
-# Add new packages
-npm install package-name
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
-
-# Code linting
-npm run lint
-```
-
-### **Agent Development**
-To create a new agent:
-
-1. **Create agent file**: `backend/app/agents/new_agent.py`
-2. **Extend BaseAgent**: Implement `execute()` method
-3. **Add to workflow**: Update `optimization_workflow.py`
-4. **Add to imports**: Update `__init__.py` files
-5. **Test**: Create tests in `test_agents.py`
-
----
-
-## 📈 **Performance & Scalability**
-
-### **Current Performance**
-- **API Response Time**: 2-15 seconds per optimization
-- **Concurrent Requests**: 10+ simultaneous optimizations
-- **Data Processing**: 50km radius analysis in <30 seconds
-- **Memory Usage**: ~500MB backend, ~100MB frontend
-
-### **Scalability Options**
-- **Horizontal Scaling**: Multiple backend replicas
-- **Caching**: Redis for API response caching
-- **Database**: Weaviate clustering for production
-- **CDN**: Static asset distribution
-
----
 
 ## 🔐 **Environment Variables**
 
@@ -536,54 +410,6 @@ VITE_MAP_CENTER_LNG=78.6569
 
 ---
 
-## 🚨 **Troubleshooting**
-
-### **Common Issues**
-
-1. **Port Conflicts**
-```bash
-# Kill processes on occupied ports
-lsof -ti:8000 | xargs kill -9  # Backend
-lsof -ti:5173 | xargs kill -9  # Frontend
-```
-
-2. **Poetry Issues**
-```bash
-# Reinstall Poetry
-curl -sSL https://install.python-poetry.org | python3 -
-export PATH="$HOME/.local/bin:$PATH"
-```
-
-3. **Docker Issues**
-```bash
-# Reset Docker environment
-docker-compose down
-docker system prune -f
-docker-compose up --build
-```
-
-4. **API Connection Errors**
-- Verify backend is running: `curl http://localhost:8000/api/v1/health`
-- Check CORS settings in `main.py`
-- Confirm environment variables are set
-
-### **Getting Help**
-- Check `docs/TROUBLESHOOTING.md` for detailed solutions
-- Review logs in terminal output
-- Use browser DevTools for frontend debugging
-- Verify all services are running with health checks
-
----
-
-## 🤝 **Contributing**
-
-### **Development Setup**
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Run the test suite
-6. Submit a pull request
 
 ### **Code Standards**
 - **Python**: Black formatting, type hints, docstrings
@@ -592,30 +418,3 @@ docker-compose up --build
 
 ---
 
-## 📄 **License**
-
-MIT License - see LICENSE file for details.
-
----
-
-## 🙏 **Acknowledgments**
-
-- **OpenStreetMap** community for geographic data
-- **India Government** for open data initiatives
-- **LangGraph** team for workflow orchestration
-- **Tamil Nadu Government** for infrastructure data
-- **React & FastAPI** communities for excellent frameworks
-
----
-
-## 📞 **Support**
-
-For questions, issues, or contributions:
-- 📧 Email: [your-email@example.com]
-- 🐛 Issues: [GitHub Issues]
-- 📖 Documentation: `docs/` folder
-- 💬 Discussions: [GitHub Discussions]
-
----
-
-**🎉

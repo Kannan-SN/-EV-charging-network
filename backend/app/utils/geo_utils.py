@@ -1,4 +1,4 @@
-# backend/app/utils/geo_utils.py
+
 import math
 from typing import Tuple, List, Dict, Any
 from geopy.distance import geodesic

@@ -1,4 +1,4 @@
-# backend/app/routers/optimization.py (Fixed for TypedDict state)
+
 from fastapi import APIRouter, HTTPException, BackgroundTasks
 from datetime import datetime
 import uuid

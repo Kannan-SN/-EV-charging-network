@@ -1,4 +1,4 @@
-# backend/app/config.py (Fixed for Pydantic V2)
+
 import os
 from pydantic import Field
 from pydantic_settings import BaseSettings

@@ -1,6 +1,6 @@
-# backend/app/agents/roi_agent.py (Fixed imports)
+
 import logging
-from typing import Dict, Any, List  # Added missing imports
+from typing import Dict, Any, List  
 
 from app.agents.base_agent import BaseAgent
 from app.models import AgentState, StationType
@@ -21,7 +21,7 @@ class CostROIEstimator(BaseAgent):
             if 'errors' not in state:
                 state['errors'] = []
             
-            # Calculate ROI based on all collected data from other agents
+           
             roi_data = await self._calculate_dynamic_roi(state)
             
             state['roi_data'] = roi_data
@@ -40,56 +40,56 @@ class CostROIEstimator(BaseAgent):
     async def _calculate_dynamic_roi(self, state: AgentState) -> Dict[str, Any]:
         """Calculate ROI using real data from other agents"""
         
-        # Get data from other agents
+        
         traffic_data = state.get('traffic_data', {})
         grid_data = state.get('grid_data', {})
         competitor_data = state.get('competitor_data', {})
         demographic_data = state.get('demographic_data', {})
         
-        # Base installation costs by station type (realistic INR costs)
+       
         station_costs = {
-            "fast": 4500000,      # 45L for DC fast charging
-            "regular": 2000000,   # 20L for AC charging  
-            "ultra_fast": 7000000 # 70L for ultra-fast charging
+            "fast": 4500000,      
+            "regular": 2000000,   
+            "ultra_fast": 7000000 
         }
         
         station_type = state.get('station_type', 'fast')
         base_installation_cost = station_costs.get(station_type, 4500000)
         
-        # Dynamic cost adjustments based on real data
+      
         cost_adjustments = self._calculate_cost_adjustments(grid_data, traffic_data)
         total_installation_cost = base_installation_cost * cost_adjustments['cost_multiplier']
         
-        # Dynamic revenue calculation based on real data
+       
         revenue_factors = self._calculate_revenue_factors(
             traffic_data, demographic_data, competitor_data
         )
         
         base_monthly_revenue = {
-            "fast": 180000,       # 1.8L for DC fast
-            "regular": 80000,     # 80K for AC
-            "ultra_fast": 320000  # 3.2L for ultra-fast
+            "fast": 180000,       
+            "regular": 80000,   
+            "ultra_fast": 320000 
         }
         
         monthly_revenue = base_monthly_revenue.get(station_type, 180000)
         monthly_revenue *= revenue_factors['revenue_multiplier']
         
-        # Operating costs (percentage of revenue + fixed costs)
-        monthly_operating_cost = (monthly_revenue * 0.25) + 25000  # 25% + 25K fixed
+       
+        monthly_operating_cost = (monthly_revenue * 0.25) + 25000  
         net_monthly_income = monthly_revenue - monthly_operating_cost
         
-        # Payback period calculation
+      
         if net_monthly_income > 0:
             payback_months = total_installation_cost / net_monthly_income
         else:
-            payback_months = 999  # Indicates negative cash flow
+            payback_months = 999 
         
-        # ROI Score calculation (0-10)
+       
         roi_score = self._calculate_roi_score(
             payback_months, revenue_factors, cost_adjustments
         )
         
-        # Risk assessment
+      
         risk_factors = self._assess_risk_factors(
             competitor_data, grid_data, demographic_data
         )
@@ -116,42 +116,42 @@ class CostROIEstimator(BaseAgent):
         base_multiplier = 1.0
         adjustments = {}
         
-        # Grid infrastructure adjustments
+        
         if grid_data:
             grid_score = grid_data.get('grid_score', 7.0)
             available_capacity = grid_data.get('available_capacity_mw', 100)
             
             if available_capacity < 20:
-                # Need grid upgrades
+              
                 base_multiplier *= 1.25
                 adjustments['grid_upgrade_needed'] = True
                 adjustments['grid_cost_increase'] = 25
             elif grid_score < 5:
-                # Poor grid quality
+                
                 base_multiplier *= 1.15
                 adjustments['grid_reinforcement'] = True
                 adjustments['grid_cost_increase'] = 15
             
-            # High voltage availability reduces costs
+           
             if grid_data.get('infrastructure_quality') == 'Excellent':
                 base_multiplier *= 0.95
                 adjustments['infrastructure_bonus'] = True
         
-        # Traffic accessibility adjustments
+        
         if traffic_data:
             road_analysis = traffic_data.get('road_analysis', {})
             highway_types = road_analysis.get('highway_types', {})
             
-            # Check if major road access available
+            
             major_roads = highway_types.get('primary', 0) + highway_types.get('motorway', 0)
             
             if major_roads == 0:
-                # Poor road access increases civil work costs
+              
                 base_multiplier *= 1.20
                 adjustments['access_road_needed'] = True
                 adjustments['civil_cost_increase'] = 20
             elif major_roads >= 2:
-                # Excellent access reduces costs
+                
                 base_multiplier *= 0.98
                 adjustments['excellent_access'] = True
         
@@ -160,7 +160,7 @@ class CostROIEstimator(BaseAgent):
             'adjustments': adjustments,
             'base_cost_factors': {
                 'grid_impact': round((base_multiplier - 1.0) * 100, 1),
-                'access_impact': 0  # Could be expanded
+                'access_impact': 0 
             }
         }
     
@@ -175,7 +175,7 @@ class CostROIEstimator(BaseAgent):
         base_multiplier = 1.0
         factors = {}
         
-        # Traffic volume impact
+       
         if traffic_data:
             traffic_metrics = traffic_data.get('traffic_metrics', {})
             daily_traffic = traffic_metrics.get('estimated_daily_traffic', 10000)
@@ -195,13 +195,13 @@ class CostROIEstimator(BaseAgent):
             
             base_multiplier *= traffic_multiplier
         
-        # Demographic impact
+        
         if demographic_data:
             ev_adoption = demographic_data.get('ev_adoption_rate', 0.05)
             income_score = demographic_data.get('income_score', 6.0)
             population = demographic_data.get('population', 50000)
             
-            # EV adoption rate impact
+           
             if ev_adoption > 0.15:
                 ev_multiplier = 1.3
                 factors['high_ev_adoption'] = True
@@ -212,7 +212,7 @@ class CostROIEstimator(BaseAgent):
                 ev_multiplier = 0.9
                 factors['early_ev_market'] = True
             
-            # Income level impact
+          
             if income_score > 8:
                 income_multiplier = 1.2
                 factors['high_income_area'] = True
@@ -223,7 +223,7 @@ class CostROIEstimator(BaseAgent):
                 income_multiplier = 0.85
                 factors['lower_income_area'] = True
             
-            # Population size impact
+            
             if population > 500000:
                 pop_multiplier = 1.15
                 factors['large_market'] = True
@@ -236,7 +236,7 @@ class CostROIEstimator(BaseAgent):
             
             base_multiplier *= ev_multiplier * income_multiplier * pop_multiplier
         
-        # Competition impact
+       
         if competitor_data:
             market_opportunity = competitor_data.get('market_opportunity', 'Medium')
             
@@ -269,7 +269,7 @@ class CostROIEstimator(BaseAgent):
     ) -> float:
         """Calculate ROI score (0-10) based on financial metrics"""
         
-        # Base score from payback period
+        
         if payback_months <= 12:
             payback_score = 10.0
         elif payback_months <= 18:
@@ -283,14 +283,14 @@ class CostROIEstimator(BaseAgent):
         else:
             payback_score = 2.0
         
-        # Adjust for market attractiveness
+       
         market_attractiveness = revenue_factors.get('market_attractiveness', 'Medium')
         if market_attractiveness == 'High':
             payback_score += 0.5
         elif market_attractiveness == 'Low':
             payback_score -= 1.0
         
-        # Adjust for cost factors
+        
         cost_multiplier = cost_adjustments.get('cost_multiplier', 1.0)
         if cost_multiplier > 1.2:
             payback_score -= 0.5
@@ -321,17 +321,17 @@ class CostROIEstimator(BaseAgent):
         risks = []
         risk_level = "Low"
         
-        # Competition risks
+        
         if competitor_data and competitor_data.get('market_opportunity') == 'Low':
             risks.append("High competition in market")
             risk_level = "High"
         
-        # Infrastructure risks
+        
         if grid_data and grid_data.get('available_capacity_mw', 100) < 20:
             risks.append("Limited grid capacity requires upgrades")
             risk_level = "Medium" if risk_level == "Low" else "High"
         
-        # Market risks
+        
         if demographic_data and demographic_data.get('ev_adoption_rate', 0.05) < 0.03:
             risks.append("Low EV adoption rate in area")
             risk_level = "Medium" if risk_level == "Low" else risk_level
@@ -359,11 +359,11 @@ class CostROIEstimator(BaseAgent):
     def _calculate_break_even_utilization(self, monthly_operating_cost: int, station_type: str) -> Dict[str, Any]:
         """Calculate break-even utilization rates"""
         
-        # Average revenue per charging session by type
+       
         revenue_per_session = {
-            "fast": 400,       # INR per session
-            "regular": 150,    # INR per session
-            "ultra_fast": 600  # INR per session
+            "fast": 400,       
+            "regular": 150,    
+            "ultra_fast": 600  
         }
         
         session_revenue = revenue_per_session.get(station_type, 400)
@@ -373,7 +373,7 @@ class CostROIEstimator(BaseAgent):
         return {
             'monthly_sessions_needed': int(sessions_needed),
             'daily_sessions_needed': round(daily_sessions_needed, 1),
-            'utilization_hours_needed': round(daily_sessions_needed * 0.5, 1),  # 30 min per session avg
+            'utilization_hours_needed': round(daily_sessions_needed * 0.5, 1),  
             'revenue_per_session': session_revenue
         }
     

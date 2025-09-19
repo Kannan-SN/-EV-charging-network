@@ -1,4 +1,4 @@
-# backend/app/routers/health.py
+
 from fastapi import APIRouter
 from datetime import datetime
 import httpx
@@ -32,7 +32,7 @@ async def health_check():
     services["gemini"] = "configured" if gemini_key else "not_configured"
 
     # Check external APIs
-    services["openstreetmap"] = "available"  # OSM is generally available
+    services["openstreetmap"] = "available"  
 
     return HealthCheck(
         status="healthy", timestamp=datetime.now(), version="0.1.0", services=services

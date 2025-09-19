@@ -1,4 +1,4 @@
-# backend/app/main.py (Fixed for FastAPI modern lifespan events)
+
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware

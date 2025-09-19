@@ -1,4 +1,4 @@
-# backend/app/utils/data_fetcher.py
+
 import httpx
 import asyncio
 import logging
@@ -133,10 +133,3 @@ class DataFetcher:
         return {"population": 500000, "density": 2000, "income_level": "Middle"}
 
 
-# ALL __init__.py FILES
-
-
-# backend/tests/__init__.py
-"""
-Tests package for the EV charging optimizer.
-"""

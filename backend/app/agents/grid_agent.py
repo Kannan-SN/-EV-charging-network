@@ -1,7 +1,7 @@
-# backend/app/agents/grid_agent.py (Fixed imports)
+
 import asyncio
 import httpx
-from typing import Dict, Any, List, Tuple  # Added missing imports
+from typing import Dict, Any, List, Tuple 
 import logging
 import json
 from geopy.geocoders import Nominatim
@@ -26,7 +26,7 @@ class GridCapacityEvaluator(BaseAgent):
             if 'errors' not in state:
                 state['errors'] = []
             
-            # Get coordinates first
+            
             coordinates = await self._get_coordinates(state['location'])
             if not coordinates:
                 state['errors'].append(f"Could not geocode location: {state['location']}")
@@ -35,7 +35,7 @@ class GridCapacityEvaluator(BaseAgent):
             
             lat, lon = coordinates
             
-            # Fetch real grid data from APIs
+         
             grid_data = await self._fetch_real_grid_data(lat, lon, state['location'])
             
             state['grid_data'] = grid_data
@@ -66,16 +66,16 @@ class GridCapacityEvaluator(BaseAgent):
         """Fetch real grid data from multiple APIs"""
         async with httpx.AsyncClient(timeout=30.0) as client:
             try:
-                # 1. Fetch electrical infrastructure from OpenStreetMap
+                
                 power_infrastructure = await self._fetch_power_infrastructure(client, lat, lon)
                 
-                # 2. Fetch population density (affects grid load)
+               
                 population_data = await self._fetch_population_data(client, lat, lon)
                 
-                # 3. Fetch industrial data (affects grid capacity needs)
+                
                 industrial_data = await self._fetch_industrial_data(client, lat, lon)
                 
-                # 4. Calculate dynamic grid metrics
+                
                 grid_metrics = self._calculate_dynamic_grid_metrics(
                     power_infrastructure, population_data, industrial_data, location
                 )
@@ -97,7 +97,7 @@ class GridCapacityEvaluator(BaseAgent):
     async def _fetch_power_infrastructure(self, client: httpx.AsyncClient, lat: float, lon: float) -> Dict[str, Any]:
         """Fetch power infrastructure from OpenStreetMap"""
         try:
-            # Query for power infrastructure around the location
+            
             query = f"""
             [out:json][timeout:25];
             (
@@ -118,17 +118,17 @@ class GridCapacityEvaluator(BaseAgent):
                 data = response.json()
                 elements = data.get("elements", [])
                 
-                # Analyze infrastructure
+                
                 substations = [e for e in elements if e.get("tags", {}).get("power") == "substation"]
                 power_lines = [e for e in elements if e.get("tags", {}).get("power") in ["line", "cable"]]
                 existing_chargers = [e for e in elements if e.get("tags", {}).get("amenity") == "charging_station"]
                 
-                # Calculate infrastructure density
+                
                 substation_count = len(substations)
                 power_line_count = len(power_lines)
                 existing_charger_count = len(existing_chargers)
                 
-                # Analyze substation capacity indicators
+               
                 high_voltage_substations = len([
                     s for s in substations 
                     if s.get("tags", {}).get("voltage", "").replace("kV", "").replace("000", "").isdigit() 
@@ -159,7 +159,7 @@ class GridCapacityEvaluator(BaseAgent):
     async def _fetch_population_data(self, client: httpx.AsyncClient, lat: float, lon: float) -> Dict[str, Any]:
         """Fetch population data from GeoNames API (free tier)"""
         try:
-            # Use GeoNames API for population data
+            
             response = await client.get(
                 f"http://api.geonames.org/findNearbyPlaceNameJSON",
                 params={
@@ -167,7 +167,7 @@ class GridCapacityEvaluator(BaseAgent):
                     "lng": lon,
                     "radius": 50,
                     "maxRows": 5,
-                    "username": "demo"  # Free demo account - replace with your username
+                    "username": "demo"  
                 }
             )
             
@@ -176,12 +176,12 @@ class GridCapacityEvaluator(BaseAgent):
                 places = data.get("geonames", [])
                 
                 if places:
-                    # Get the largest nearby place
+                    
                     largest_place = max(places, key=lambda x: x.get("population", 0))
                     population = largest_place.get("population", 0)
                     
-                    # Estimate population density (rough calculation)
-                    area_km2 = 3.14159 * (50 ** 2)  # 50km radius area
+                   
+                    area_km2 = 3.14159 * (50 ** 2)  
                     density = population / area_km2 if area_km2 > 0 else 0
                     
                     return {
@@ -189,10 +189,10 @@ class GridCapacityEvaluator(BaseAgent):
                         "population_density": round(density, 1),
                         "largest_city": largest_place.get("name", "Unknown"),
                         "admin_name": largest_place.get("adminName1", ""),
-                        "grid_load_estimate": population * 0.001  # kW per person estimate
+                        "grid_load_estimate": population * 0.001  
                     }
             
-            # Fallback calculation
+            
             return {"population": 100000, "population_density": 200, "grid_load_estimate": 100}
             
         except Exception as e:
@@ -227,7 +227,7 @@ class GridCapacityEvaluator(BaseAgent):
                 fuel_stations = len([e for e in elements if e.get("tags", {}).get("amenity") == "fuel"])
                 major_roads = len([e for e in elements if e.get("tags", {}).get("highway") in ["motorway", "trunk", "primary"]])
                 
-                # Calculate industrial load factor
+               
                 industrial_score = (industrial_areas * 2) + commercial_areas + (fuel_stations * 0.5)
                 
                 return {
@@ -254,39 +254,39 @@ class GridCapacityEvaluator(BaseAgent):
     ) -> Dict[str, Any]:
         """Calculate dynamic grid metrics based on real data"""
         
-        # Infrastructure score (0-10)
+      
         infra_score = min((
             power_infra.get("substation_count", 0) * 1.5 +
             power_infra.get("high_voltage_substations", 0) * 3 +
             power_infra.get("infrastructure_density", 0) * 0.1
         ), 10)
         
-        # Load factor based on population and industrial activity
+       
         base_load = population.get("grid_load_estimate", 100)
         industrial_load = industrial.get("industrial_score", 0) * 50
         total_load = base_load + industrial_load
         
-        # Estimated grid capacity based on infrastructure
+       
         estimated_capacity = (
-            power_infra.get("substation_count", 0) * 50 +  # 50MW per substation estimate
-            power_infra.get("high_voltage_substations", 0) * 200  # 200MW per HV substation
+            power_infra.get("substation_count", 0) * 50 +  
+            power_infra.get("high_voltage_substations", 0) * 200  
         )
-        estimated_capacity = max(estimated_capacity, 100)  # Minimum 100MW
+        estimated_capacity = max(estimated_capacity, 100)  
         
-        # Load factor (utilization)
+        
         load_factor = min(total_load / estimated_capacity, 0.95) if estimated_capacity > 0 else 0.8
         
-        # Available capacity for EV charging
+       
         available_capacity = estimated_capacity * (1 - load_factor)
         
-        # Reliability score based on infrastructure redundancy
+        
         reliability = min((
             power_infra.get("substation_count", 0) * 0.8 +
             power_infra.get("power_line_count", 0) * 0.1 +
             power_infra.get("high_voltage_substations", 0) * 1.5
         ), 10)
         
-        # Overall grid score
+        
         grid_score = (infra_score * 0.4 + reliability * 0.4 + (10 - load_factor * 10) * 0.2)
         
         return {
@@ -296,7 +296,7 @@ class GridCapacityEvaluator(BaseAgent):
             "reliability_score": round(reliability, 1),
             "infrastructure_score": round(infra_score, 1),
             "grid_score": round(grid_score, 1),
-            "capacity_sufficient": available_capacity > 20,  # 20MW threshold for EV charging
+            "capacity_sufficient": available_capacity > 20,  
             "grid_stress_level": "Low" if load_factor < 0.7 else "Medium" if load_factor < 0.85 else "High",
             "infrastructure_quality": (
                 "Excellent" if infra_score >= 8 else

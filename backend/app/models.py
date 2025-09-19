@@ -1,4 +1,4 @@
-# backend/app/models.py (Fixed for LangGraph compatibility)
+
 from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Optional, Dict, Any
 from datetime import datetime
